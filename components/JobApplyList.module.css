@@ -1,0 +1,6 @@
+.descriptionWrap{
+    inline-size: 100%;
+    overflow-wrap: break-all;
+    overflow: auto;
+    height: 110px;
+}

@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "./layout.module.css"
 import Link from "next/link";
 import NavBar from './navbar'
+
 export default function Layout({children, current}) {
     return (
         <div>
@@ -13,7 +14,7 @@ export default function Layout({children, current}) {
                 <NavBar current = {current}/>
             </header>
 
-            <section class="m-2 container mx-auto">
+            <section class="m-2 container mx-auto mt-20">
                 {children}
             </section>
             

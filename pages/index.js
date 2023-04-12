@@ -4,10 +4,56 @@ import Layout from '@/components/layout'
 import Modal from '@/components/modal'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import { useState } from 'react'
+import {useCollection} from 'react-firebase-hooks/firestore'
+import JobApplyList from '@/components/JobApplyList'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faPlus,
+  faAnchor,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '@/config/firebase'
+import { addDoc, collection, query, where } from 'firebase/firestore'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [loggedInUser, _loading, _error] = useAuthState(auth);
+
+  const [recipienCompanyName, setRecipienCompanyName] = useState('');
+
+  const [recipienSalary, setRecipienSalary] = useState('');
+
+  const [recipienPosition, setRecipienPosition] = useState('');
+
+  const [recipienLocation, setRecipienLocation] = useState('');
+
+  const [recipienDescription, setRecipienDescription] = useState('');
+
+  const [recipienSkill, setRecipienSkill] = useState('');
+
+
+  const queryGetJobApply = query(collection(db, 'jobapplys'), where('user', '==', loggedInUser?.email));
+  const [jobApplysSnapShot, __loading, __error] = useCollection(queryGetJobApply);
+
+  const createNoteApplyJob = async () => { 
+    if(!recipienCompanyName) return
+
+    await addDoc(collection(db, 'jobapplys'), {
+      user: loggedInUser?.email,
+      company: recipienCompanyName,
+      salary: recipienSalary,
+      position: recipienPosition,
+      location: recipienLocation,
+      description: recipienDescription,
+      skill: recipienSkill
+    })
+    ToggleShow();
+  }
+
+
   return (
     <Layout current="home">
       <Head>
@@ -17,8 +63,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <button className= {`${styles.layoutBackground} ${styles.buttonAdd} flex text-white font-bold py-2 px-4 rounded-full`} onClick={Show}>
-          +
+        <button className= {`${styles.layoutBackground} ${styles.buttonAdd} flex text-white font-bold py-2 px-4 rounded-full`} onClick={ToggleShow}>
+        <FontAwesomeIcon
+          icon={faPlus}
+          style={{ fontSize: 34, color: "white" }}
+        />
         </button>
         <Modal id="input">
           <form className="w-full max-w-3xl mx-auto">
@@ -27,215 +76,147 @@ export default function Home() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
                   Company Name
                 </label>
-                <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="Your name company apply" />
+                <input 
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                  type="text" 
+                  value={recipienCompanyName}
+                  onChange={event => {
+                    setRecipienCompanyName(event.target.value)
+                  }}
+                  placeholder="Your name company apply" />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                  Description 'Note'
+                </label>
+                <input 
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                  id="grid-password" 
+                  type="text" 
+                  value={recipienDescription}
+                  onChange={event => {
+                    setRecipienDescription(event.target.value)
+                  }}
+                  placeholder="Note" />
               </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                  Position
+                  Skill
                 </label>
-                <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="Your position apply" />
+                <div className="relative">
+                  <input 
+                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                    id="grid-city" 
+                    type="text" 
+                    value={recipienSkill}
+                    onChange={event => {
+                      setRecipienSkill(event.target.value)
+                    }}
+                    placeholder="NextJS, ReactJS, JavaScript" 
+                  />
+                </div>
               </div>
             </div>
+
             <div className="flex flex-wrap -mx-3 mb-2">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
-                  City
+                  Location
                 </label>
-                <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque" />
+                <input 
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                  id="grid-city" 
+                  type="text" 
+                  value={recipienLocation}
+                  onChange={event => {
+                    setRecipienLocation(event.target.value)
+                  }}
+                  placeholder="Ho Chi Minh" />
               </div>
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-                  State
+                  Position
                 </label>
                 <div className="relative">
-                  <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                    <option>New Mexico</option>
-                    <option>Missouri</option>
-                    <option>Texas</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  {/* <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                    <option>Leader</option>
+                    <option>AI</option>
+                    <option>Front-End</option>
+                    <option>Back-End</option>
+                  </select> */}
+                  <input 
+                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                    id="grid-city" 
+                    type="text" 
+                    value={recipienPosition}
+                    onChange={event => {
+                      setRecipienPosition(event.target.value)
+                    }}
+                    placeholder="Leader" 
+                  />
+                  {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
                   Salary
                 </label>
-                <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="100000" />
+                <input 
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                  id="grid-salary" 
+                  type="text" 
+                  placeholder="100000" 
+                  value={recipienSalary}
+                  onChange={event => {setRecipienSalary(event.target.value)}}
+                />
               </div>
             </div>
-            <button className= {`${styles.layoutBackground} w-full text-white font-bold py-2 px-4 rounded-lg`}>
+            <div className="flex flex-wrap -mx-3">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                  Image
+                </label>
+                <div className='flex items-center justify-center'>
+                  <Image 
+                    priority
+                    src="/images/noimage.png"
+                    width={108}
+                    height={108}
+                  />
+                  <input className="" id="grid-password" type="file" placeholder="Salary" />
+                </div>
+              </div>
+            </div>
+            <button disabled={!recipienCompanyName} onClick={createNoteApplyJob} className= {`${styles.layoutBackground} w-full text-white font-bold py-2 px-4 mt-4 rounded-lg`}>
               Save
             </button>
           </form>
         </Modal>
         
-        <section className={`flex flex-wrap justify-center mt-16`}>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
-          <div className= {`m-4`}>
-            <div class="max-w-sm rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="/images/job.png" alt="Sunset in the mountains" />
-              <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Software Engineer - TJob</div>
-                <p class="text-gray-700 text-base">
-                  <strong>Salary: </strong>100.000$
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Position: </strong>Dev
-                </p>
-                <p class="text-gray-700 text-base">
-                  <strong>Location: </strong>Ho Chi minh
-                </p>
-                <strong>Description: </strong>
-                <p class="text-gray-700 text-base">
-                  Technology infomation
-                </p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
-              </div>
-            </div>
-          </div>
+        <section className={`flex flex-wrap justify-center`}>
+          {jobApplysSnapShot?.docs.map(jobapply => <JobApplyList 
+                                                      key={jobapply.id} 
+                                                      id={jobapply.id} 
+                                                      jobapplyCompany={(jobapply.data()).company} 
+                                                      jobapplySalary={(jobapply.data()).salary}
+                                                      jobapplyPosition={(jobapply.data()).position}
+                                                      jobapplyLocation={(jobapply.data()).location}
+                                                      jobapplyDescription={(jobapply.data()).description}
+                                                      jobapplySkill={(jobapply.data()).skill}
+                                                    />)}
         </section>
       </main>
     </Layout>
   )
-  function Show() {
+  function ToggleShow() {
     let modal = document.getElementById("input");
-    modal.classList.remove("hidden")
+    modal.classList.toggle("hidden")
   }
 }
