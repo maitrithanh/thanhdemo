@@ -199,9 +199,8 @@ export default function Home() {
             </button>
           </form>
         </Modal>
-        
         <section className={`flex flex-wrap justify-center`}>
-          {jobApplysSnapShot?.docs.map(jobapply => <JobApplyList 
+          {jobApplysSnapShot == ""?(jobApplysSnapShot.docs.map(jobapply => <JobApplyList 
                                                       key={jobapply.id} 
                                                       id={jobapply.id} 
                                                       jobapplyCompany={(jobapply.data()).company} 
@@ -210,7 +209,12 @@ export default function Home() {
                                                       jobapplyLocation={(jobapply.data()).location}
                                                       jobapplyDescription={(jobapply.data()).description}
                                                       jobapplySkill={(jobapply.data()).skill}
-                                                    />)}
+                                                    />)) : 
+                                                    (<>
+                                                      <div className=''>
+                                                        <img src="https://i.pinimg.com/originals/ee/73/10/ee7310933e223ce7cdff5cb59f581912.gif" />
+                                                      </div>
+                                                    </>)}
         </section>
       </main>
     </Layout>

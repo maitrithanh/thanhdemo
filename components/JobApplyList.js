@@ -5,7 +5,7 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
         style: 'currency',
         currency: 'USD',
       });
-      var money = formatter.format(Number(jobapplySalary));
+    var money = formatter.format(Number(jobapplySalary));
     return (
     <div>
         <div className= {`m-4`}>
@@ -25,14 +25,12 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
                   <strong>Location: </strong>{jobapplyLocation}
                 </p>
                 <strong>Description: </strong>
-                <p className={`text-gray-700 text-base ${styles.descriptionWrap}`}>
+                <p className={`bg-gray-200 px-1 rounded text-gray-700 text-base ${styles.descriptionWrap}`}>
                     {jobapplyDescription}
                 </p>
               </div>
               <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NextJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#NodeJS</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Javascript</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{jobapplySkill}</span>
               </div>
             </div>
           </div>
