@@ -8,6 +8,7 @@ import { useState } from 'react'
 import {useCollection} from 'react-firebase-hooks/firestore'
 import JobApplyList from '@/components/JobApplyList'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loading from '@/components/loading'
 import {
   faSearch,
   faPlus,
@@ -20,7 +21,7 @@ import { addDoc, collection, query, where } from 'firebase/firestore'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const [loggedInUser, _loading, _error] = useAuthState(auth);
+  const [loggedInUser, loading, _error] = useAuthState(auth);
 
   const [recipienCompanyName, setRecipienCompanyName] = useState('');
 
@@ -58,6 +59,7 @@ export default function Home() {
     ToggleShow();
   }
 
+  if(loading) return <Loading />
 
   return (
     <Layout current="home">
