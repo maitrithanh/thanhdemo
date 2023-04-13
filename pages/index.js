@@ -38,6 +38,11 @@ export default function Home() {
   const queryGetJobApply = query(collection(db, 'jobapplys'), where('user', '==', loggedInUser?.email));
   const [jobApplysSnapShot, __loading, __error] = useCollection(queryGetJobApply);
 
+  const isNullJobApply = () => 
+    jobApplysSnapShot?.docs.find(jobapply => (jobapply.data()).company);
+
+  console.log("test",isNullJobApply);
+
   const createNoteApplyJob = async () => { 
     if(!recipienCompanyName) return
 
@@ -111,7 +116,7 @@ export default function Home() {
                 <div className="relative">
                   <input 
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
-                    id="grid-city" 
+                    id="grid-skill" 
                     type="text" 
                     value={recipienSkill}
                     onChange={event => {
@@ -151,7 +156,7 @@ export default function Home() {
                   </select> */}
                   <input 
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
-                    id="grid-city" 
+                    id="grid-position" 
                     type="text" 
                     value={recipienPosition}
                     onChange={event => {
@@ -200,7 +205,7 @@ export default function Home() {
           </form>
         </Modal>
         <section className={`flex flex-wrap justify-center`}>
-          {jobApplysSnapShot == ""?(jobApplysSnapShot.docs.map(jobapply => <JobApplyList 
+          {isNullJobApply()? (jobApplysSnapShot.docs.map(jobapply => <JobApplyList 
                                                       key={jobapply.id} 
                                                       id={jobapply.id} 
                                                       jobapplyCompany={(jobapply.data()).company} 

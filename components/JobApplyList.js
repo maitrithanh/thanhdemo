@@ -25,7 +25,7 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
                   <strong>Location: </strong>{jobapplyLocation}
                 </p>
                 <strong>Description: </strong>
-                <p className={`bg-gray-200 px-1 rounded text-gray-700 text-base ${styles.descriptionWrap}`}>
+                <p className={`bg-gray-100 px-2 rounded text-gray-700 text-base ${styles.descriptionWrap}`}>
                     {jobapplyDescription}
                 </p>
               </div>
