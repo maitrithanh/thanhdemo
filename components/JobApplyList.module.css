@@ -4,3 +4,8 @@
     overflow: auto;
     height: 110px;
 }
+
+.btnCustom {
+    height: 40px;
+    width: 40px;
+}
