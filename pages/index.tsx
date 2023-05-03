@@ -208,7 +208,7 @@ export default function Home() {
           </form>
         </Modal>
         <section className={`flex flex-wrap justify-center`}>
-          {isNullJobApply()? (jobApplysSnapShot.docs.map(jobapply => <JobApplyList 
+          {isNullJobApply()? (jobApplysSnapShot?.docs.map(jobapply => <JobApplyList 
                                                       key={jobapply.id} 
                                                       id={jobapply.id} 
                                                       jobapplyCompany={(jobapply.data()).company} 
@@ -229,6 +229,6 @@ export default function Home() {
   )
   function ToggleShow() {
     let modal = document.getElementById("input");
-    modal.classList.toggle("hidden")
+    modal?.classList.toggle("hidden")
   }
 }

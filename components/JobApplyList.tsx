@@ -5,7 +5,7 @@ import {
   faPenToSquare, faCircleInfo, faTrashCan
 } from '@fortawesome/free-solid-svg-icons'
 
-export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, jobapplyPosition, jobapplyLocation, jobapplyDescription, jobapplySkill}) {
+export default function JobApplyList ({id}: {id:string}, {jobapplyCompany}: {jobapplyCompany: string}, {jobapplySalary}: {jobapplySalary: Float64Array}, {jobapplyPosition}: {jobapplyPosition: string}, {jobapplyLocation}: {jobapplyLocation: string}, {jobapplyDescription}: {jobapplyDescription: string}, {jobapplySkill}:{jobapplySkill:string}) {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',

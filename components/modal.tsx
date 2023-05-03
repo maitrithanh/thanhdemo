@@ -1,6 +1,7 @@
+import { ReactNode } from 'react';
 import styles from './modal.module.css'
 
-export default function Modal({id,children}) {
+export default function Modal({id}: {id: any}, {children}: {children: any}) {
     return (
         <div className= {`relative z-10 hidden`} aria-labelledby="modal-title" role="dialog" aria-modal="true" id={`${id}`}>
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -24,7 +25,7 @@ export default function Modal({id,children}) {
     )
     function Exit() {
         let modal = document.getElementById(`${id}`);
-        modal.classList.add("hidden");
+        modal?.classList.add("hidden");
     }
 }
 
