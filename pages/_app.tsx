@@ -1,10 +1,10 @@
-import '@/styles/globals.css'
+import '../styles/globals.css'
 import "@fortawesome/fontawesome-svg-core/styles.css"; 
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Login from './login';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '@/config/firebase';
-import Loading from '@/components/loading';
+import { auth, db } from '../config/firebase';
+import Loading from '../components/loading';
 import { useEffect } from 'react';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 

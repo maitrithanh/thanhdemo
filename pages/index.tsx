@@ -1,21 +1,21 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import Layout from '@/components/layout'
-import Modal from '@/components/modal'
+import Layout from '../components/layout'
+import Modal from '../components/modal'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 import { useState } from 'react'
 import {useCollection} from 'react-firebase-hooks/firestore'
-import JobApplyList from '@/components/JobApplyList'
+import JobApplyList from '../components/JobApplyList'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Loading from '@/components/loading'
+import Loading from '../components/loading'
 import {
   faSearch,
   faPlus,
   faAnchor,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth, db } from '@/config/firebase'
+import { auth, db } from '../config/firebase'
 import { addDoc, collection, query, where } from 'firebase/firestore'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -70,7 +70,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <button className= {`${styles.layoutBackground} ${styles.buttonAdd} flex text-white font-bold py-2 px-4 rounded-full`} onClick={ToggleShow}>
+        <button className= {`bg-blue-700 ${styles.buttonAdd} flex text-white font-bold py-2 px-4 rounded-full`} onClick={ToggleShow}>
         <FontAwesomeIcon
           icon={faPlus}
           style={{ fontSize: 34, color: "white" }}
@@ -80,7 +80,7 @@ export default function Home() {
           <form className="w-full max-w-3xl mx-auto">
           <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Company Name
                 </label>
                 <input 
@@ -96,7 +96,7 @@ export default function Home() {
 
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Description 'Note'
                 </label>
                 <input 
@@ -112,7 +112,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Skill
                 </label>
                 <div className="relative">
@@ -132,7 +132,7 @@ export default function Home() {
 
             <div className="flex flex-wrap -mx-3 mb-2">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Location
                 </label>
                 <input 
@@ -146,7 +146,7 @@ export default function Home() {
                   placeholder="Ho Chi Minh" />
               </div>
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Position
                 </label>
                 <div className="relative">
@@ -172,7 +172,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Salary
                 </label>
                 <input 
@@ -187,7 +187,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap -mx-3">
               <div className="w-full px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Image
                 </label>
                 <div className='flex items-center justify-center'>
@@ -196,12 +196,13 @@ export default function Home() {
                     src="/images/noimage.png"
                     width={108}
                     height={108}
+                    alt=''
                   />
                   <input className="" id="grid-password" type="file" placeholder="Salary" />
                 </div>
               </div>
             </div>
-            <button disabled={!recipienCompanyName} onClick={createNoteApplyJob} className= {`${styles.layoutBackground} w-full text-white font-bold py-2 px-4 mt-4 rounded-lg`}>
+            <button disabled={!recipienCompanyName} onClick={createNoteApplyJob} className= {`bg-blue-700 w-full text-white font-bold py-2 px-4 mt-4 rounded-lg`}>
               Save
             </button>
           </form>
