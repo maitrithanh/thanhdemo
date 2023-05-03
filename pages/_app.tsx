@@ -12,21 +12,23 @@ config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
   const [loggedInUser, loading, _error] = useAuthState(auth);
-
+  
   useEffect(() => {
     const setUserInDb = async () => {
        try {
-        await setDoc(
-          doc(db, 'users', loggedInUser.uid), 
-          {
-            email: loggedInUser?.email,
-            lastSeen: serverTimestamp(),
-            photoURL: loggedInUser?.photoURL 
-          }, 
-          {
-            merge: true // chi cap nhat khi thay doi
-          }
-        )
+        if(loggedInUser) {
+          await setDoc(
+            doc(db, 'users', loggedInUser.uid), 
+            {
+              email: loggedInUser?.email,
+              lastSeen: serverTimestamp(),
+              photoURL: loggedInUser?.photoURL 
+            }, 
+            {
+              merge: true // chi cap nhat khi thay doi
+            }
+          )
+        }
        } catch (error) {
         console.log("ERROR SETTING USER IN DB", error);
        }

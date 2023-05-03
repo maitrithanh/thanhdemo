@@ -5,7 +5,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 
-export default function NavBar({current}) {
+type NavBarProps = {
+    current: string;
+}
+
+export default function NavBar({current}: NavBarProps) {
     const [loggedInUser, loading, _error] = useAuthState(auth);
     let btnLogin = document.getElementById('btnGetLogin');
     let btnLogout = document.getElementById('btnGetLogOut');
@@ -73,5 +77,5 @@ export default function NavBar({current}) {
 
 function ToggleNav() {
     let ulNav = document.getElementById('navbar-sticky');
-    ulNav.classList.toggle('xxs:hidden');    
+    ulNav?.classList.toggle('xxs:hidden');    
 }
