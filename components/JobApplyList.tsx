@@ -1,4 +1,5 @@
 import styles from './JobApplyList.module.css'
+import Image from 'next/image'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
   faPenToSquare, faCircleInfo, faTrashCan
@@ -15,7 +16,7 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
         <div className= {`m-4`}>
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
               <div className='relative'>
-                <img className="w-full" src="/images/job.png" alt="Sunset in the mountains" />
+                <Image priority className="w-full" src="/images/job.png" alt="Sunset in the mountains" width={200} height={100} />
                 <div className='absolute top-0 ml-1 right-1'>
                   {/* btn edit */}
                   <button className=''>

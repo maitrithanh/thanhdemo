@@ -24,7 +24,7 @@ const Login = () => {
                 height={8}
                 alt='logo tjob'
                 />
-            <button className='mt-2 bg-blue-600 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded flex" onClick={signIn}'>
+            <button className='mt-2 bg-blue-600 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded flex' onClick={signIn}>
                 <svg viewBox="0 0 48 48" height='30' >
                     <title>Google Logo</title>
                     <clipPath id="g">

@@ -9,7 +9,7 @@ export default function Contact() {
                 <title>Contact</title>
             </Head>
             <section>
-                <h6>Lieen He</h6>
+                <h6>Lien He</h6>
             </section>
         </Layout>
     )

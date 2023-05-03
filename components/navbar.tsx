@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from 'next/image'
 import styles from './navbar.module.css'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase";
@@ -21,7 +22,7 @@ export default function NavBar({current}) {
             <nav className="bg-gray-900 fixed w-full z-10 top-0 left-0 border-b border-gray-200 border-gray-600">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link href="/" className="flex items-center">
-                        <img src="/images/tjoblogo.png" className="h-10 mr-1" alt="TJob Logo" />
+                        <Image src="/images/tjoblogo.png" className="h-10 mr-1" alt="TJob Logo" width={60} height={100} />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">TJob</span>
                     </Link>
                     <div className="flex md:order-2">

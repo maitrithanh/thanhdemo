@@ -97,7 +97,7 @@ export default function Home() {
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                  Description 'Note'
+                  Description
                 </label>
                 <input 
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
@@ -220,7 +220,7 @@ export default function Home() {
                                                     />)) : 
                                                     (<>
                                                       <div className=''>
-                                                        <img src="https://i.pinimg.com/originals/ee/73/10/ee7310933e223ce7cdff5cb59f581912.gif" />
+                                                        <Image priority src="https://i.pinimg.com/originals/ee/73/10/ee7310933e223ce7cdff5cb59f581912.gif" width={800} height={800} alt=''/>
                                                       </div>
                                                     </>)}
         </section>
