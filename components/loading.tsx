@@ -9,6 +9,7 @@ const Loading = () => {
             src="/images/tjoblogo.png"
             width={208}
             height={8}
+            alt='logo'
         />
     </div>
   )

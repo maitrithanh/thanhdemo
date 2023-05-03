@@ -14,7 +14,7 @@ export default function Layout({children, current}) {
                 <NavBar current = {current}/>
             </header>
 
-            <section class="m-2 container mx-auto mt-20">
+            <section className="m-2 container mx-auto mt-20">
                 {children}
             </section>
             
