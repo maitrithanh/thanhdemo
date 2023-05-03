@@ -3,7 +3,12 @@ import styles from "./layout.module.css"
 import Link from "next/link";
 import NavBar from './navbar'
 
-export default function Layout({children}: {children: any},{current}:{current: string}) {
+type LayoutProps = {
+    children: any;
+    current: string;
+}
+
+export default function Layout({children, current}: LayoutProps) {
     return (
         <div>
             <Head>
