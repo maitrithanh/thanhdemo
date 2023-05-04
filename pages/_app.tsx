@@ -8,11 +8,12 @@ import Loading from '../components/loading';
 import { useEffect } from 'react';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import {AppProps} from 'next/app'
+
 config.autoAddCss = false; 
 
 export default function App({ Component, pageProps }: AppProps) {
   const [loggedInUser, loading, _error] = useAuthState(auth);
-  
+
   useEffect(() => {
     const setUserInDb = async () => {
        try {

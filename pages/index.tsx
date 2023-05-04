@@ -16,13 +16,29 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../config/firebase'
-import { addDoc, collection, query, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs, query, where } from 'firebase/firestore'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
-  const [loggedInUser, loading, _error] = useAuthState(auth);
+type Data = {
+  data: any;
+}
 
+export default function Home({data}:Data) {
+
+  // async function dataa() {
+  //   const dataTest = query(collection(db, 'jobapplys'), where('user', '==', "trangmbplus@gmail.com"));
+  //   try {
+  //     const docsSnap = await getDocs(dataTest);
+  //     docsSnap.forEach(doc => {
+  //       console.log(doc.data())
+  //     })
+  //   } catch (error) {
+  //       console.log(error);
+  //     }
+  // }
+  const [loggedInUser, loading, _error] = useAuthState(auth);
+  
   const [recipienCompanyName, setRecipienCompanyName] = useState('');
 
   const [recipienSalary, setRecipienSalary] = useState('');
@@ -34,16 +50,16 @@ export default function Home() {
   const [recipienDescription, setRecipienDescription] = useState('');
 
   const [recipienSkill, setRecipienSkill] = useState('');
-
-
+  
+  
+  // lay danh sach cong viec ung tuyen da them theo email
   const queryGetJobApply = query(collection(db, 'jobapplys'), where('user', '==', loggedInUser?.email));
   const [jobApplysSnapShot, __loading, __error] = useCollection(queryGetJobApply);
 
+  //kiem tra xem da co cong viec nao da them chua
   const isNullJobApply = () => 
     jobApplysSnapShot?.docs.find(jobapply => (jobapply.data()).company);
-
-  console.log("test",isNullJobApply);
-
+  //ham them cong viec da ung tuyen moi vao db
   const createNoteApplyJob = async () => { 
     if(!recipienCompanyName) return
 
@@ -190,7 +206,7 @@ export default function Home() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Image
                 </label>
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center border-2 border-dashed rounded-xl'>
                   <Image 
                     priority
                     src="/images/noimage.png"
@@ -207,8 +223,29 @@ export default function Home() {
             </button>
           </form>
         </Modal>
+        {/* render cong viec ung tuyen da them vao */}
         <section className={`flex flex-wrap justify-center`}>
-          {isNullJobApply()? (jobApplysSnapShot?.docs.map(jobapply => <JobApplyList 
+          {data? 
+            (<JobApplyList 
+              id= {data.id}
+              jobapplyCompany= {data.company}
+              jobapplySalary={data.salary}
+              jobapplyPosition={data.position}
+              jobapplyLocation={data.location}
+              jobapplyDescription={data.description}
+              jobapplySkill={data.skill}
+            />)
+             : 
+            (<>
+              <div className=''>
+                <Image priority src="/images/freetime.gif" width={800} height={800} alt=''/>
+              </div>
+            </>)}
+        </section>
+
+        {/* <section className={`flex flex-wrap justify-center`}>
+          {isNullJobApply()? (jobApplysSnapShot?.docs.map(jobapply =>
+                                                    <JobApplyList 
                                                       key={jobapply.id} 
                                                       id={jobapply.id} 
                                                       jobapplyCompany={(jobapply.data()).company} 
@@ -220,10 +257,12 @@ export default function Home() {
                                                     />)) : 
                                                     (<>
                                                       <div className=''>
-                                                        <Image priority src="https://i.pinimg.com/originals/ee/73/10/ee7310933e223ce7cdff5cb59f581912.gif" width={800} height={800} alt=''/>
+                                                        <Image priority src="/images/freetime.gif" width={800} height={800} alt=''/>
                                                       </div>
                                                     </>)}
-        </section>
+        </section> */}
+
+
       </main>
     </Layout>
   )
@@ -232,3 +271,23 @@ export default function Home() {
     modal?.classList.toggle("hidden")
   }
 }
+
+
+
+export async function getServerSideProps() {
+
+  // , where('user', '==', email)
+  const dataCloud = query(collection(db, 'jobapplys'));
+  var data = {};
+  try {
+    const docsSnap = await getDocs(dataCloud);
+    docsSnap.forEach(doc => {
+      data = doc.data();
+    })
+  } catch (error) {
+      console.log(error);
+    }
+  return { props: {data} }
+}
+
+

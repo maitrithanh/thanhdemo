@@ -26,7 +26,7 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
         <div className= {`m-4`}>
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
               <div className='relative'>
-                <Image priority className="w-full" src="/images/job.png" alt="Sunset in the mountains" width={200} height={100} />
+                <Image priority className="w-full" src="/images/job.png" alt="Sunset in the mountains" width="100" height="100" layout="responsive" objectFit="contain" />
                 <div className='absolute top-0 ml-1 right-1'>
                   {/* btn edit */}
                   <button className=''>

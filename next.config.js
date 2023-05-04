@@ -2,11 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['i.pinimg.com'],
+    domains: ['lh3.googleusercontent.com'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.pinimg.com',
+        hostname: 'lh3.googleusercontent.com',
         port: '',
         pathname: '',
       },
