@@ -4,9 +4,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
   faPenToSquare, faCircleInfo, faTrashCan
 } from '@fortawesome/free-solid-svg-icons'
+import { auth, db } from '../config/firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 type jobApllyListProps = {
   id: string;
+  user: any;
   jobapplyCompany: string;
   jobapplySalary: Float32Array;
   jobapplyPosition: string;
@@ -15,14 +18,16 @@ type jobApllyListProps = {
   jobapplySkill: string;
 }
 
-export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, jobapplyPosition, jobapplyLocation, jobapplyDescription, jobapplySkill}: jobApllyListProps) {
-    const formatter = new Intl.NumberFormat('en-US', {
+export default function JobApplyList ({id, user, jobapplyCompany, jobapplySalary, jobapplyPosition, jobapplyLocation, jobapplyDescription, jobapplySkill}: jobApllyListProps) {
+  const [loggedInUser, _loading, _error] = useAuthState(auth);
+  ShowCardJobApply();
+  const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
       });
     var money = formatter.format(Number(jobapplySalary));
     return (
-    <div>
+    <div className='jobCardApply' id={`${user}`}>
         <div className= {`m-4`}>
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
               <div className='relative'>
@@ -65,6 +70,9 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
                   <strong>Salary: </strong>{money}
                 </p>
                 <p className="text-gray-700 text-base">
+                  <strong>Email Test: </strong>{user}
+                </p>
+                <p className="text-gray-700 text-base">
                   <strong>Position: </strong>{jobapplyPosition}
                 </p>
                 <p className="text-gray-700 text-base">
@@ -82,5 +90,14 @@ export default function JobApplyList ({id, jobapplyCompany, jobapplySalary, joba
           </div>
     </div>
   )
+  function ShowCardJobApply() {
+    var cardJobApply = document.getElementsByClassName("jobCardApply");
+    for (let i = 0; i < cardJobApply.length; i++) {
+      if(cardJobApply.item(i)?.id != loggedInUser?.email) {
+        cardJobApply?.item(i)?.classList.add("hidden");
+      }
+    }
+  }
 }
+
 

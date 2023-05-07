@@ -17,6 +17,7 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../config/firebase'
 import { addDoc, collection, doc, getDocs, query, where } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,7 +26,6 @@ type Data = {
 }
 
 export default function Home({data}:Data) {
-
   // async function dataa() {
   //   const dataTest = query(collection(db, 'jobapplys'), where('user', '==', "trangmbplus@gmail.com"));
   //   try {
@@ -223,18 +223,25 @@ export default function Home({data}:Data) {
             </button>
           </form>
         </Modal>
+        <div>
+    </div>
         {/* render cong viec ung tuyen da them vao */}
         <section className={`flex flex-wrap justify-center`}>
-          {data? 
-            (<JobApplyList 
-              id= {data.id}
-              jobapplyCompany= {data.company}
-              jobapplySalary={data.salary}
-              jobapplyPosition={data.position}
-              jobapplyLocation={data.location}
-              jobapplyDescription={data.description}
-              jobapplySkill={data.skill}
-            />)
+          {data.length != 0? 
+            (data.map((jobapply:any) => (
+              <div key={jobapply.id}>
+                <JobApplyList 
+                  id= {jobapply.id}
+                  user = {jobapply.user}
+                  jobapplyCompany= {jobapply.company}
+                  jobapplySalary={jobapply.salary}
+                  jobapplyPosition={jobapply.position}
+                  jobapplyLocation={jobapply.location}
+                  jobapplyDescription={jobapply.description}
+                  jobapplySkill={jobapply.skill}
+                />            
+            </div>              
+            )))
              : 
             (<>
               <div className=''>
@@ -242,27 +249,6 @@ export default function Home({data}:Data) {
               </div>
             </>)}
         </section>
-
-        {/* <section className={`flex flex-wrap justify-center`}>
-          {isNullJobApply()? (jobApplysSnapShot?.docs.map(jobapply =>
-                                                    <JobApplyList 
-                                                      key={jobapply.id} 
-                                                      id={jobapply.id} 
-                                                      jobapplyCompany={(jobapply.data()).company} 
-                                                      jobapplySalary={(jobapply.data()).salary}
-                                                      jobapplyPosition={(jobapply.data()).position}
-                                                      jobapplyLocation={(jobapply.data()).location}
-                                                      jobapplyDescription={(jobapply.data()).description}
-                                                      jobapplySkill={(jobapply.data()).skill}
-                                                    />)) : 
-                                                    (<>
-                                                      <div className=''>
-                                                        <Image priority src="/images/freetime.gif" width={800} height={800} alt=''/>
-                                                      </div>
-                                                    </>)}
-        </section> */}
-
-
       </main>
     </Layout>
   )
@@ -272,22 +258,20 @@ export default function Home({data}:Data) {
   }
 }
 
-
-
+// var mail = "maitrithanh06@gmail.com"
 export async function getServerSideProps() {
-
-  // , where('user', '==', email)
-  const dataCloud = query(collection(db, 'jobapplys'));
-  var data = {};
+  const userID = auth.currentUser?.email ?? "";
+  // , where("user", "==", userID) 
+  console.log("UserID: ",userID);
+  const dataCloud = query(collection(db, "jobapplys"));
+  var data;
   try {
     const docsSnap = await getDocs(dataCloud);
-    docsSnap.forEach(doc => {
-      data = doc.data();
-    })
+    data = docsSnap.docs.map((doc) => (doc.data()));
+    // console.log(data);
   } catch (error) {
-      console.log(error);
-    }
-  return { props: {data} }
+    console.log(error);
+  }
+  return { props: { data } };
 }
-
 
